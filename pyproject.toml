@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "form_checker"
+version = "0.1.0"
+description = "A visual aid for determining your disc golf form."
+authors = ["Andres Weber <andresmweber@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9,<3.11"
+opencv-python = "^4.5.4"
+mediapipe = "^0.8.9"
+imageio = "^2.13.5"
+
+[tool.poetry.dev-dependencies]
+black = "^21.12b0"
+pytest = "^6.2.5"
+pytest-cov = "^3.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+form_checker = 'form_checker.check:run'
+
+[tool.pytest.ini_options]
+addopts = '--cov=form_checker --cov-report term -v -r w'
+
+[tool.black]
+include = '\.pyi?$'
+line-length = 120
+target-version = ['py38']
+
+[tool.coverage.run]
+branch = true
+source = ["form_checker"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "if self.debug:",
+  "pragma: no cover",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+]
+ignore_errors = true
+omit = [
+  "tests/*",
+  "**/*/__init__.py",
+]
+show_missing = true
