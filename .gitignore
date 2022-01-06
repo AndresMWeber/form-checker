@@ -142,4 +142,8 @@ examples/mov/
 output/
 node_modules
 
-tests/**/*.mp4
+docs/**/*.mp4
+
+.serverless/
+.requirements.zip
+unzip_requirements.py
