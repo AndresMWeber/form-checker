@@ -29,7 +29,7 @@ def get_presigned_url(bucket, key):
     )
 
 
-def retreive_bucket_info(event):
+def retrieve_bucket_info(event):
     s3 = event["Records"][0]["s3"]
     name = s3["bucket"]["name"]
     key = s3["object"]["key"]

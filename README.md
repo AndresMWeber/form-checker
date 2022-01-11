@@ -3,6 +3,10 @@
 </p>
 
 <div align="center">
+    <a href="https://github.com/AndresMWeber/form-checker/actions/workflows/pipeline.yml">
+        <img alt="GitHub CICD Action Status" src="https://github.com/AndresMWeber/form-checker/actions/workflows/pipeline.yml/badge.svg" />
+    </a>
+    <br />
     <a href="https://github.com/AndresMWeber/form-checker">
         <img alt="Status" src="https://img.shields.io/badge/status-active-success.svg" />
     </a>
