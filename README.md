@@ -24,7 +24,7 @@
 <br>
 
 <p align="center"> 
-    A tool that creates a skeletal overlay for slow motion pose form critiques via cloud based python infrastructure.
+    Automatically generate a skeletal overlay for slow motion pose form critiques over videos.
     <br> 
 </p>
 
@@ -55,7 +55,7 @@
 
 ## 🧐 About <a name = "about"></a>
 
-A CLI tool that creates a kaleidescope-esque gradient image of your favorite movie.
+A tool that creates a skeletal overlay for slow motion pose form critiques via cloud based python infrastructure.
 
 ## 🖥️ Screenshots <a name = "screenshots"></a>
 
@@ -93,22 +93,24 @@ UPLOAD_BUCKET=form-checker-storage
 #### Deploy
 
 1. Create the domain for the AWS Api Gateway
-    ```console
-    foo@bar:~$ sls create_domain
-    ```
-1. Deploys the serverless cloud infrastructure.
-   ```console
-    foo@bar:~$ sls deploy -v
-    ```
+```console
+foo@bar:~$ sls create_domain
+```
+
+2. Deploys the serverless cloud infrastructure.
+```console
+foo@bar:~$ sls deploy -v
+```
+
 3. Now you will be able to upload a file using `${DOMAIN}/presigned`
-   ```console
-    foo@bar:~$ curl -L -X POST 'subdomain.domain.com/presigned' \
-    -H 'Content-Type: application/json' \
-    --data-raw '{
-        "filename": "test"
-    }'
-    ```
-    Now you may upload a file using the response url and the upload lambda will trigger which will create a new video file in the s3 bucket.
+```console
+foo@bar:~$ curl -L -X POST 'subdomain.domain.com/presigned' \
+-H 'Content-Type: application/json' \
+--data-raw '{
+    "filename": "test"
+}'
+```
+Now you may upload a file using the response url and the upload lambda will trigger which will create a new video file in the s3 bucket.
 
 ## ⛏️ Tech Stack <a name = "tech"></a>
 
