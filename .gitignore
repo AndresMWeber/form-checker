@@ -149,3 +149,4 @@ tests/**/*.mp4
 unzip_requirements.py
 awscliv2.zip
 aws/
+tmp/

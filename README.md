@@ -47,6 +47,7 @@
     - [Prerequsites](#prerequsites)
     - [Install](#install)
     - [Configure](#configure)
+    - [Local](#local)
     - [Deploy](#deploy)
 - [⛏️ Tech Stack <a name = "tech"></a>](#️-tech-stack-)
 - [✍️ Authors <a name = "authors"></a>](#️-authors-)
@@ -88,6 +89,22 @@ https://user-images.githubusercontent.com/1587270/149015534-822a8618-9037-4f9f-9
 ```shell
 DEBUG=form-checker:*
 UPLOAD_BUCKET=form-checker-storage
+```
+
+#### Local
+1. Start a poetry virtual environment shell
+```console
+foo@bar:~$ poetry shell
+```
+
+2. Run the script on the local file:
+```console
+foo@bar:~$ form_check /path/to/your/file.mp4
+```
+
+3. You can also run the following to open a file browser using Tkinter:
+```console
+foo@bar:~$ form_check_ui
 ```
 
 #### Deploy

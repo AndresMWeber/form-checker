@@ -1,8 +1,6 @@
-import os
 import json
 import logging
 from form_checker.utils.aws import (
-    cors_headers,
     get_presigned_url,
     retrieve_bucket_info,
     upload_file,
@@ -10,7 +8,7 @@ from form_checker.utils.aws import (
 from form_checker.main import process
 
 
-def handler(event, context):
+def handler(event, _):
     logging.info("Received event:", event)
     try:
         event = json.loads(event["body"])
@@ -21,9 +19,8 @@ def handler(event, context):
     try:
         file_path = process(get_presigned_url(bucket, key))
         upload_file(file_path, bucket, key.replace("uploads", "processed"))
-        return {"headers": cors_headers, "statusCode": 201}
+        logging.info('Finished processing video successfully.')
     except Exception as e:
         logging.error(e)
-        message = f"Error getting object {key} from bucket {bucket}. Make sure they exist and your bucket is in the same region as this function."
+        message = f"Error processing object {key} from bucket {bucket}. Make sure they exist and your bucket is in the same region as this function."
         logging.error(message)
-        return {"statusCode": 500, "message": message}

@@ -20,7 +20,8 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-form_checker = 'form_checker.utils.process_video:ui'
+form_check_ui = 'form_checker.invoke:ui'
+form_check = 'form_checker.invoke:cli'
 
 [tool.pytest.ini_options]
 addopts = '--cov=form_checker --cov-report term -v -r w'

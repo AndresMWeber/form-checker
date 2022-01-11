@@ -10,7 +10,6 @@ except:
 
 
 def ui():
-
     root = tkinter.Tk()
     root.wm_withdraw()
     filename = askopenfilename()
@@ -33,4 +32,9 @@ def cli():
     )
 
     args = parser.parse_args()
+    
+    if not args.target:
+        logging.error('Must specify a file.')
+        raise TypeError('You must specify a file as the first positional argument')
+
     process(args.target, end=args.end)
