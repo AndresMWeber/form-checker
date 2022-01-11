@@ -142,7 +142,7 @@ examples/mov/
 output/
 node_modules
 
-*.mp4
+tests/**/*.mp4
 
 .serverless/
 .requirements.zip

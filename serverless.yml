@@ -64,7 +64,7 @@ provider:
     serverSideEncryption: AES256
 
 custom:
-  imageBucket: ${env:UPLOAD_BUCKET}
+  imageBucket: ${env:UPLOAD_BUCKET, 'form-checker-storage'}
   pythonRequirements:
     layer: true
     dockerizePip: non-linux
