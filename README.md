@@ -59,11 +59,9 @@ A CLI tool that creates a kaleidescope-esque gradient image of your favorite mov
 
 ## 🖥️ Screenshots <a name = "screenshots"></a>
 
-<div align=center>
 <h2>Example</h2>
-</div>
 
-https://raw.githubusercontent.com/AndresMWeber/form-checker/main/docs/examples/form.mp4
+https://user-images.githubusercontent.com/1587270/149015534-822a8618-9037-4f9f-91ea-ffff29665856.mp4
 
 ## 💨 Quickstart <a name = "quickstart"></a>
 
