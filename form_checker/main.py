@@ -8,24 +8,14 @@ from cv2 import (
     FILLED,
 )
 from mediapipe import solutions
-from form_checker.utils.video import Video
+from form_checker.video import Video
 
 mpDraw = solutions.drawing_utils
 mpPose = solutions.pose
 pose = mpPose.Pose()
 
 
-def ui():
-    import tkinter
-    from tkinter.filedialog import askopenfilename
-
-    root = tkinter.Tk()
-    root.wm_withdraw()
-    filename = askopenfilename()
-    run(filename, True)
-
-
-def run(input_file):
+def process(input_file, **kwargs):
     logging.info(f"Processing input file: {input_file}")
     video = Video(input_file)
     logging.info(f"Wrapped video in internal Video class.")
@@ -33,20 +23,19 @@ def run(input_file):
         video.p.suffix, f"_processed{video.p.suffix}"
     )
 
+    # TODO: Use multi-threading.
     with video(output_name) as output:
         for frame in range(len(video)):
             logging.info(f"Writing frame {frame}/{len(video)}")
             img = video.get_frame(frame)
-            overlay_pose_on_frame(img, frame)
+            draw_pose(img, frame)
             output.write(img)
         output_name = output.compressed_filename
 
     return output_name
 
 
-def overlay_pose_on_frame(
-    img, frame_number, circle_color=(255, 0, 0), circle_radius=5
-):
+def draw_pose(img, frame_number, circle_color=(255, 0, 0), circle_radius=5):
     imgRGB = cvtColor(img, COLOR_BGR2RGB)
     results = pose.process(imgRGB)
 
@@ -56,6 +45,7 @@ def overlay_pose_on_frame(
         )
         for id, lm in enumerate(results.pose_landmarks.landmark):
             h, w, c = img.shape
+            logging.info(f"Creating circle for ${id}")
 
             cx, cy = int(lm.x * w), int(lm.y * h)
             circle(img, (cx, cy), circle_radius, circle_color, FILLED)

@@ -5,7 +5,6 @@ from cv2 import (
     CAP_PROP_FPS,
     CAP_PROP_POS_FRAMES,
     CAP_PROP_FRAME_COUNT,
-    destroyAllWindows,
     VideoCapture,
     VideoWriter_fourcc,
     VideoWriter,
