@@ -1,4 +1,6 @@
 service: form-checker
+# variablesResolutionMode: 20210326
+frameworkVersion: "2"
 org: andresmweber
 useDotenv: true
 plugins:
@@ -8,8 +10,6 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-deployment-bucket
   - serverless-python-requirements
-  # - serverless-layers
-  # - serverless-export-env
 
 package:
   excludeDevDependencies: true
@@ -22,21 +22,28 @@ package:
 provider:
   name: aws
   profile: aw
-  runtime: python3.8
+  runtime: python3.9
+  ecr:
+    images:
+      formchecker:
+        path: ./
   lambdaHashingVersion: 20201221
   stage: ${self:custom.serverlessBranch, self:custom.gitBranch, opt:stage, env:STAGE}
   region: ${opt:region, 'us-east-1'}
   memorySize: 512
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - "s3:PutObject"
-        - "s3:GetObject"
-      Resource:
-        Fn::Join:
-          - ""
-          - - "arn:aws:s3:::"
-            - Ref: UploadBucket
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "s3:GetObject"
+            - "s3:PutObject"
+          Resource:
+            Fn::Join:
+              - ""
+              - - "arn:aws:s3:::"
+                - Ref: UploadBucket
+                - "/*"
   tags:
     GIT-USER: ${self:custom.serverlessGitUser}
     PROPERTY: "form-checker"
@@ -59,30 +66,56 @@ provider:
 custom:
   imageBucket: ${env:UPLOAD_BUCKET}
   pythonRequirements:
-    usePoetry: true
-    zip: true
-    dockerizePip: true
+    layer: true
+    dockerizePip: non-linux
     useDownloadCache: true
     useStaticCache: false
-    layer: true
+    invalidateCaches: false
+    zip: true
     slim: true
     # slimPatternsAppendDefaults: false
     slimPatterns:
-      - '**/*.egg-info*'
-      - '**/botocore/**'
-      - '**/s3transfer/**'
-      - '**/opencv_python.libs/**'
-      - '**/numpy.libs/**'
-      - '**/opencv_contrib_python/**'
-      - '**/opencv_contrib_python.libs/**'
-      - '**/*.dist-info/**'
-    invalidateCaches: false
+      - "**/*.py[c|o]"
+      - "**/__pycache__/**"
+      - "**/*.dist-info*"
+      - "**/*.egg-info*"
+      - "**/botocore/**"
+      - "**/s3transfer/**"
+      - "**/opencv_python_headless.libs/**"
+      - "**/Pillow.libs/**"
+      - "**/cv2/**"
+      - "**/numpy/**"
+      - "**/numpy.libs/**"
+      - "**/opencv_contrib_python/**"
+      - "**/opencv_contrib_python.libs/**"
+      - "**/*.dist-info/**"
+      - "**/PIL/**"
+      - "**/matplotlib/**"
+      - "**/bin/**"
+      - "**/tomli/**"
+      - "**/setuptools*/**"
+      - "**/pkg_resources/**"
+      - "**/mpl_toolkits/**"
+      - "**/mediapipe/**"
     noDeploy:
       - boto3
       - botocore
+      - docutils
       - jmespath
+      - pip
+      - python-dateutil
       - s3transfer
+      - setuptools
+      - six
+      - black
       - opencv_contrib_python
+      - matplotlib
+      - PIL
+      - docutils
+      - numpy
+      - cv2
+      - tomli
+      - mediapipe
   customDomain:
     domainName: ${self:provider.environment.DOMAIN}
     basePath: ""
@@ -95,8 +128,6 @@ custom:
   gitBranch: ${git:branch}
   serverlessBranch: ${env:SERVERLESS_BRANCH}
   serverlessGitUser: ${env:SERVERLESS_COMMIT_USER}
-  # serverless-layers:
-  #   layersDeploymentBucket: ${self:provider.environment.DEPLOY_BUCKET}
 
 functions:
   version:
@@ -107,17 +138,27 @@ functions:
           method: get
           cors: true
   upload:
-    handler: form_checker.handlers.upload.handler
-    layers:
-      - Ref: PythonRequirementsLambdaLayer
+    image:
+      name: formchecker
     events:
-      - s3:
-          bucket: ${self:custom.imageBucket}
-          event: s3:ObjectCreated:*
-          rules:
-            - prefix: uploads/
-            - suffix: .mp4
-          existing: true
+    - s3:
+        bucket: ${self:custom.imageBucket}
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: uploads/
+          - suffix: .mp4
+        existing: true
+    timeout: 900
+    # handler: form_checker.handlers.upload.handler
+    # events:
+    #   - http:
+    #       path: upload
+    #       method: post
+    #       cors:
+    #         origin: "*"
+    #         headers:
+    #           - Content-Type
+    #         allowCredentials: false
 
   presigned:
     handler: form_checker.handlers.presigned.handler
@@ -128,7 +169,7 @@ functions:
           path: presigned
           method: post
           cors:
-            origin: '*'
+            origin: "*"
             headers:
               - Content-Type
             allowCredentials: false

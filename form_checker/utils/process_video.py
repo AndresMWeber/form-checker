@@ -1,11 +1,18 @@
 import logging
-import cv2
-import mediapipe as mp
+from cv2 import (
+    cvtColor,
+    circle,
+    putText,
+    COLOR_BGR2RGB,
+    FONT_HERSHEY_SIMPLEX,
+    FILLED,
+)
+from mediapipe import solutions
 from form_checker.utils.video import Video
 
-mpPose = mp.solutions.pose
+mpDraw = solutions.drawing_utils
+mpPose = solutions.pose
 pose = mpPose.Pose()
-mpDraw = mp.solutions.drawing_utils
 
 
 def ui():
@@ -32,6 +39,7 @@ def run(input_file):
             img = video.get_frame(frame)
             overlay_pose_on_frame(img, frame)
             output.write(img)
+        output_name = output.compressed_filename
 
     return output_name
 
@@ -39,7 +47,7 @@ def run(input_file):
 def overlay_pose_on_frame(
     img, frame_number, circle_color=(255, 0, 0), circle_radius=5
 ):
-    imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    imgRGB = cvtColor(img, COLOR_BGR2RGB)
     results = pose.process(imgRGB)
 
     if results.pose_landmarks:
@@ -50,13 +58,13 @@ def overlay_pose_on_frame(
             h, w, c = img.shape
 
             cx, cy = int(lm.x * w), int(lm.y * h)
-            cv2.circle(img, (cx, cy), circle_radius, circle_color, cv2.FILLED)
+            circle(img, (cx, cy), circle_radius, circle_color, FILLED)
 
-            cv2.putText(
+            putText(
                 img,
                 str(frame_number),
                 (50, 50),
-                cv2.FONT_HERSHEY_SIMPLEX,
+                FONT_HERSHEY_SIMPLEX,
                 1,
                 circle_color,
                 3,

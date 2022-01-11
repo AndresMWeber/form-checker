@@ -142,8 +142,10 @@ examples/mov/
 output/
 node_modules
 
-docs/**/*.mp4
+*.mp4
 
 .serverless/
 .requirements.zip
 unzip_requirements.py
+awscliv2.zip
+aws/
