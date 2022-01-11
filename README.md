@@ -83,9 +83,9 @@ https://user-images.githubusercontent.com/1587270/149015534-822a8618-9037-4f9f-9
 1. `npm install` - Installs Serverless framework
 
 #### Configure
-1. `aws profile` - Creates an AWS profile named `aw` or change `serverless.yml.provider.profile` to your own profile name (or delete the line for default)
-1. `sls login` - Logs in to serverless
-1. `create .env` - Configure as needed, defaults will be set otherwise.
+1. `aws profile` - Create an AWS profile or change `serverless.yml.provider.profile` to your own profile name (or delete the line for `[default]`)
+2. `sls login` - Log in to serverless
+3. `create .env` - Configure as needed, defaults will be set otherwise.
 ```shell
 DEBUG=form-checker:*
 UPLOAD_BUCKET=form-checker-storage

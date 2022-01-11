@@ -21,7 +21,6 @@ package:
 
 provider:
   name: aws
-  profile: aw
   runtime: python3.9
   ecr:
     images:
