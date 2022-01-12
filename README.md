@@ -89,7 +89,14 @@ https://user-images.githubusercontent.com/1587270/149015534-822a8618-9037-4f9f-9
 #### Configure
 1. `aws profile` - Create an AWS profile or change `serverless.yml.provider.profile` to your own profile name (or delete the line for `[default]`)
 2. `sls login` - Log in to serverless
-3. `create .env` - Configure as needed, defaults will be set otherwise.
+3. [`add github secrets`](https://docs.github.com/en/actions/security-guides/encrypted-secrets) - Add the following repo secrets (to allow cloud deployment):
+```shell
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+AWS_DEFAULT_REGION
+CODECOV_TOKEN
+```
+4. `create .env` - Configure as needed, defaults will be set otherwise.
 ```shell
 DEBUG=form-checker:*
 UPLOAD_BUCKET=form-checker-storage
@@ -111,7 +118,11 @@ foo@bar:~$ form_check /path/to/your/file.mp4
 foo@bar:~$ form_check_ui
 ```
 
+4. Finally you can find the outputted processed/compressed version in `~./tmp/*.mp4`
+
 #### Deploy
+
+Please note that deployment will be automatic if you set up the configuration properly and push to your own fork via GitHub Actions.
 
 1. Create the domain for the AWS Api Gateway
 ```console
@@ -140,6 +151,9 @@ Now you may upload a file using the response url and the upload lambda will trig
 - [OpenCV](https://opencv.org/) - Image Processing
 - [MediaPipe](https://google.github.io/mediapipe/) - Machine Learning Model/Solution
 - [Serverless](https://www.serverless.com/) - Web Framework
+- [AWS](https://aws.amazon.com/) - Cloud Infrastructure
+- [pytest](https://docs.pytest.org/en/6.2.x/) - Testing Framework
+- [CodeCov](https://about.codecov.io/) - Test Coverage Metrics
 
 ## ✍️ Authors <a name = "authors"></a>
 
