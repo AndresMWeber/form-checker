@@ -146,18 +146,7 @@ functions:
         rules:
           - prefix: uploads/
           - suffix: .mp4
-        existing: true
     timeout: 900
-    # handler: form_checker.handlers.upload.handler
-    # events:
-    #   - http:
-    #       path: upload
-    #       method: post
-    #       cors:
-    #         origin: "*"
-    #         headers:
-    #           - Content-Type
-    #         allowCredentials: false
 
   presigned:
     handler: form_checker.handlers.presigned.handler
