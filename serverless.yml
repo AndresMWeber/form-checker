@@ -143,6 +143,7 @@ functions:
     - s3:
         bucket: ${self:custom.imageBucket}
         event: s3:ObjectCreated:*
+        existing: true
         rules:
           - prefix: uploads/
           - suffix: .mp4
