@@ -29,7 +29,7 @@ provider:
   lambdaHashingVersion: 20201221
   stage: ${self:custom.serverlessBranch, self:custom.gitBranch, opt:stage, env:STAGE}
   region: ${opt:region, 'us-east-1'}
-  memorySize: 1024
+  memorySize: 2048
   iam:
     role:
       statements:
