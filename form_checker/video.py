@@ -33,7 +33,8 @@ class Video:
         logging.info(f"Loaded state of video: {self.vidcap.isOpened()}")
         self.width = int(self.vidcap.get(3))
         self.height = int(self.vidcap.get(4))
-        self.fps = self.vidcap.get(CAP_PROP_FPS)
+        cv2_fps = self.vidcap.get(CAP_PROP_FPS)
+        self.fps = cv2_fps if cv2_fps > 20 else 24
         self.p = PurePath(file_path)
 
         self.fps_multiplier = 0.25
