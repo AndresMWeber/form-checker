@@ -3,9 +3,8 @@ import logging
 from form_checker.utils.aws import (
     get_presigned_url,
     retrieve_bucket_info,
-    upload_file,
 )
-from form_checker.main import process
+from form_checker.main import run
 
 
 def handler(event, _):
@@ -17,9 +16,10 @@ def handler(event, _):
 
     bucket, key = retrieve_bucket_info(event)
     try:
-        file_path = process(get_presigned_url(bucket, key))
-        upload_file(file_path, bucket, key.replace("uploads", "processed"))
-        logging.info('Finished processing video successfully.')
+        run(
+            get_presigned_url(bucket, key), upload=True, key=key, bucket=bucket
+        )
+        logging.info("Finished processing video successfully.")
     except Exception as e:
         logging.error(e)
         message = f"Error processing object {key} from bucket {bucket}. Make sure they exist and your bucket is in the same region as this function."

@@ -46,7 +46,10 @@ def upload_file(file_path, bucket, key):
             ExtraArgs={"Metadata": {"source_path": file_path}},
             Callback=ProgressPercentage(file_path),
         )
-        os.remove(file_path)
+        try:
+            os.remove(file_path)
+        except:
+            logging.warn(f'Failed removing file: {file_path}')
     except:
         raise
     logging.info("Successfully uploaded file to S3.")
