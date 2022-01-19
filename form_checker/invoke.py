@@ -23,6 +23,7 @@ def run(file_path=None, key=None, bucket=None, upload=False):
             file_path = get_presigned_url(bucket, key)
 
     processed_file = process(file_path)
+    logging.info("Finished processing video successfully.")
 
     if upload and bucket:
         destination_key = add_bucket_prefix(
@@ -36,9 +37,9 @@ def run(file_path=None, key=None, bucket=None, upload=False):
             bucket,
             destination_key,
         )
-
-    logging.info("Finished processing video successfully.")
-
+        logging.info("File uploaded successfully to S3")
+        return destination_key
+    return processed_file
 
 def ui():
     root = tkinter.Tk()

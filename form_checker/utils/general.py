@@ -40,7 +40,7 @@ class ProgressPercentage(object):
 
 
 def add_bucket_prefix(key: str, target: str) -> str:
-    corrected = re.sub(r"$(\w+)(?=\/)", target, key, 1)
+    corrected = re.sub(r"\/?(\w+)(?=\/)", target, key, 1)
     if corrected == key:
         return f"processed/{key}"
     return corrected

@@ -16,9 +16,10 @@ def handler(event, _):
 
     bucket, key = retrieve_bucket_info(event)
     try:
-        run(get_presigned_url(bucket, key), upload=True, key=key, bucket=bucket)
-        logging.info("Finished processing video successfully.")
+        return run(
+            get_presigned_url(bucket, key), upload=True, key=key, bucket=bucket
+        )
     except Exception as e:
         logging.error(e)
-        message = f"Error processing object {key} from bucket {bucket}. Make sure they exist and your bucket is in the same region as this function."
-        logging.error(message)
+        _, message = e.args
+        return message

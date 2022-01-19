@@ -36,15 +36,20 @@ def process(input_file, **kwargs):
 
 
 def draw_pose(img, frame_number, circle_color=(255, 0, 0), circle_radius=5):
+    logging.info(f"Drawing pose over frame {frame_number} - {img.size}px")
     imgRGB = cvtColor(img, COLOR_BGR2RGB)
     results = pose.process(imgRGB)
 
     if results.pose_landmarks:
+        logging.info(
+            f"Found {results.pose_landmarks} landmarks, overlaying..."
+        )
         mpDraw.draw_landmarks(
             img, results.pose_landmarks, mpPose.POSE_CONNECTIONS
         )
-        for id, lm in enumerate(results.pose_landmarks.landmark):
-            h, w, c = img.shape
+
+        for _, lm in enumerate(results.pose_landmarks.landmark):
+            h, w, _ = img.shape
 
             cx, cy = int(lm.x * w), int(lm.y * h)
             circle(img, (cx, cy), circle_radius, circle_color, FILLED)
