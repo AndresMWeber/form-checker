@@ -4,7 +4,7 @@ from form_checker.utils.aws import (
     get_presigned_url,
     retrieve_bucket_info,
 )
-from form_checker.main import run
+from form_checker.invoke import run
 
 
 def handler(event, _):
@@ -16,9 +16,7 @@ def handler(event, _):
 
     bucket, key = retrieve_bucket_info(event)
     try:
-        run(
-            get_presigned_url(bucket, key), upload=True, key=key, bucket=bucket
-        )
+        run(get_presigned_url(bucket, key), upload=True, key=key, bucket=bucket)
         logging.info("Finished processing video successfully.")
     except Exception as e:
         logging.error(e)
