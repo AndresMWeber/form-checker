@@ -66,5 +66,9 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
 
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        
       - name: Deploy to Lambda Function and API Gateway
         run: npx serverless deploy -v
