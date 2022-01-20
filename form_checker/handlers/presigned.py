@@ -41,4 +41,5 @@ def handler(event, context):
         return response
     except Exception as e:
         logging.error(e)
-        return {"statusCode": 500, "message": e.message}
+        _, message = e.args
+        return {"statusCode": 500, "message": message}

@@ -42,24 +42,24 @@ def draw_pose(img, frame_number, circle_color=(255, 0, 0), circle_radius=5):
 
     if results.pose_landmarks:
         logging.info(
-            f"Found {results.pose_landmarks} landmarks, overlaying..."
+            f"Found {len(results.pose_landmarks.landmark)} landmarks, overlaying..."
         )
         mpDraw.draw_landmarks(
             img, results.pose_landmarks, mpPose.POSE_CONNECTIONS
         )
+        if circle_radius:
+            for i, lm in enumerate(results.pose_landmarks.landmark):
+                h, w, _ = img.shape
 
-        for _, lm in enumerate(results.pose_landmarks.landmark):
-            h, w, _ = img.shape
+                cx, cy = int(lm.x * w), int(lm.y * h)
+                circle(img, (cx, cy), circle_radius, circle_color, FILLED)
 
-            cx, cy = int(lm.x * w), int(lm.y * h)
-            circle(img, (cx, cy), circle_radius, circle_color, FILLED)
-
-            putText(
-                img,
-                str(frame_number),
-                (50, 50),
-                FONT_HERSHEY_SIMPLEX,
-                1,
-                circle_color,
-                3,
-            )
+                putText(
+                    img,
+                    str(frame_number),
+                    (50, 50),
+                    FONT_HERSHEY_SIMPLEX,
+                    1,
+                    circle_color,
+                    3,
+                )

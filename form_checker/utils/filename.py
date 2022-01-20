@@ -1,5 +1,5 @@
 import re
-from pathlib import PurePath
+from pathlib import Path
 
 
 url_regex = re.compile(
@@ -8,8 +8,10 @@ url_regex = re.compile(
 )
 
 
-def get_basename_with_suffix(path, suffix):
-    p = PurePath(path)
+def get_basename_with_suffix(path: str, suffix: str) -> str:
+    p = Path(path)
+    if p.is_dir():
+        raise IOError("Must provide a file path, not a directory.")
     return p.name.replace(p.suffix, f"_{suffix}{p.suffix}")
 
 

@@ -102,7 +102,7 @@ class Video:
         self.output = VideoWriter(
             self.output_filename,
             fourcc=VideoWriter_fourcc(*self.output_codec),
-            fps=self.fps * self.fps_multiplier,
+            fps=self.fps,  # * self.fps_multiplier,
             frameSize=(self.width, self.height),
         )
         return self
