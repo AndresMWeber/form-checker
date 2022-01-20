@@ -31,21 +31,48 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      # Build the app and run tests
       - name: Build and Run Test
         run: poetry run pytest
+
+      - name: Install coverage
+        run: pip3 install -U coverage coverage[toml]
+
+      - name: Convert to xml coverage file
+        run: coverage xml
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: codecov
+          path: coverage.xml
+
+  upload-coverage:
+    needs: continuous-integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: "Download artifact"
+        uses: actions/download-artifact@v2
+        with:
+          name: codecov
+
+      - name: "Upload coverage to Codecov"
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
 
   continuous-deployment:
     env:
       UPLOAD_BUCKET: form-checker-videos
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [14.x]
         python-version: [3.9]
         poetry-version: [1.1.6]
-    needs: [continuous-integration]
+    needs: continuous-integration
     if: github.ref == 'refs/heads/main'
 
     steps:
@@ -75,6 +102,6 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-        
+
       - name: Deploy to Lambda Function and API Gateway
         run: npx serverless deploy -v
