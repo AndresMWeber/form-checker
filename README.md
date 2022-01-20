@@ -96,10 +96,20 @@ AWS_SECRET_ACCESS_KEY
 AWS_DEFAULT_REGION
 CODECOV_TOKEN
 ```
-4. `create .env` - Configure as needed, defaults will be set otherwise.
+1. `create .env` - Optional configuration as needed, defaults are shown below. [Example .env file](.env.example)
+
 ```shell
-DEBUG=form-checker:*
-UPLOAD_BUCKET=form-checker-storage
+FC_ACCESS_KEY_ID=<Your AWS generated key id>
+FC_SECRET_ACCESS_KEY=<Your AWS generated access key>
+UPLOAD_BUCKET=form-checker-videos
+FC_COMPRESS_OUTPUT=True
+FC_RETIME_MULTIPLIER=0.5
+FC_RETIME_OUTPUT=False
+FC_OUTPUT_CODEC=mp4v
+FC_V_CODEC=libx264
+FC_KEY_SUFFIX=form_check
+FC_OUTPUT_SUFFIX=processed
+FC_COMPRESSED_OUTPUT_SUFFIX=compressed
 ```
 
 #### Local

@@ -3,6 +3,7 @@ import argparse
 from pathlib import Path
 
 from form_checker.main import process
+from form_checker.settings import Config, class_to_str
 from form_checker.utils.aws import get_presigned_url, upload_file
 from form_checker.utils.general import add_bucket_prefix
 
@@ -13,33 +14,33 @@ except:
     logging.warning("Failed to load tkinter. UI invocation unavailable.")
 
 
-def run(file_path=None, key=None, bucket=None, upload=False):
+def run(file_path=None, key=None, bucket=None, upload=False) -> str:
+    logging.info(f"Running Form-Checker.  Config State:\n{class_to_str(Config)}")
+
+    if bucket:
+        Config.BUCKET = bucket
+
     if not file_path:
-        if not (key and bucket):
+        if not key:
             raise IOError(
                 "You must supply file_path or key/bucket to continue."
             )
         else:
             file_path = get_presigned_url(bucket, key)
 
-    processed_file = process(file_path)
+    output = process(file_path)
     logging.info("Finished processing video successfully.")
 
-    if upload and bucket:
-        destination_key = add_bucket_prefix(
-            key or Path(processed_file).name, "processed"
-        )
-        logging.info(
-            f"Uploading file {processed_file} to {bucket}/{destination_key}"
-        )
-        upload_file(
-            processed_file,
-            bucket,
-            destination_key,
+    if upload:
+        s3_key = upload_file(
+            output,
+            Config.BUCKET,
+            add_bucket_prefix(key or Path(output).name, Config.KEY_SUFFIX),
         )
         logging.info("File uploaded successfully to S3")
-        return destination_key
-    return processed_file
+        return s3_key
+    return output
+
 
 def ui():
     root = tkinter.Tk()

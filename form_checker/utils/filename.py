@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+from form_checker.settings import Config
 
 
 url_regex = re.compile(
@@ -21,3 +22,7 @@ def is_url(candidate: str) -> bool:
 
 def strip_querystring(url: str) -> str:
     return re.match(r"([\_\-\/:\.\w.]+)\??", url)[1]
+
+
+def prepend_tmp_dir(secondary_path: str) -> str:
+    return str(Path(Config.TEMP_DIR) / secondary_path)

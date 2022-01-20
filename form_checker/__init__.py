@@ -1,4 +1,7 @@
 import logging
+from dotenv import load_dotenv
+
+load_dotenv()
 
 if logging.getLogger().hasHandlers():
     # The Lambda environment pre-configures a handler logging to stderr. If a handler is already configured,

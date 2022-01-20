@@ -137,6 +137,8 @@ functions:
   upload:
     image:
       name: formchecker
+    environment:
+      COMPRESS_OUTPUT: False
     events:
       - s3:
           bucket: ${self:custom.imageBucket}
