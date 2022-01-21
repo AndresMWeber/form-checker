@@ -96,22 +96,16 @@ AWS_SECRET_ACCESS_KEY
 AWS_DEFAULT_REGION
 CODECOV_TOKEN
 ```
-1. `create .env` - Optional configuration as needed, defaults are shown below. [Example .env file](.env.example)
+1. `create .env` - Optional configuration as needed. [Example .env file](.env.example)
 
+2. `add github secrets` - If deploying using the GitHub Action workflow CI/CD you must [specify these secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) (ignore codecov token if you did not set up code coverage.):
 ```shell
-FC_ACCESS_KEY_ID=<Your AWS generated key id>
-FC_SECRET_ACCESS_KEY=<Your AWS generated access key>
-UPLOAD_BUCKET=form-checker-videos
-FC_COMPRESS_OUTPUT=True
-FC_RETIME_MULTIPLIER=0.5
-FC_RETIME_OUTPUT=False
-FC_OUTPUT_CODEC=mp4v
-FC_V_CODEC=libx264
-FC_KEY_SUFFIX=form_check
-FC_OUTPUT_SUFFIX=processed
-FC_COMPRESSED_OUTPUT_SUFFIX=compressed
+AWS_ACCESS_KEY_ID
+AWS_DEFAULT_REGION
+AWS_SECRET_ACCESS_KEY
+CODECOV_TOKEN
+FC_EMAIL_DESTINATION # (in case you want your email address obscured from SCM.)
 ```
-
 #### Local
 1. Start a poetry virtual environment shell
 ```console

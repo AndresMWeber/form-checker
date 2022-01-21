@@ -15,7 +15,9 @@ def handler(event, _):
     except:
         logging.warning("event is not stringified json:", event)
 
-    bucket, key = retrieve_bucket_info(event)
+    bucket_data = retrieve_bucket_info(event)
+    key = bucket_data['key']
+    bucket = bucket_data['bucket']
     try:
         return run(
             get_presigned_url(bucket, key), upload=True, key=key, bucket=bucket

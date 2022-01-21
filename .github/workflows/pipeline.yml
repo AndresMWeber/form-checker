@@ -66,6 +66,8 @@ jobs:
   continuous-deployment:
     env:
       UPLOAD_BUCKET: form-checker-videos
+      FC_EMAIL_DESTINATION: ${{ secrets.FC_EMAIL_DESTINATION }}
+      SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
     runs-on: ubuntu-latest
     strategy:
       matrix:

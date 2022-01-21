@@ -1,8 +1,18 @@
 import os
 import boto3
 import logging
+from typing import TypedDict
 from botocore.config import Config
 from form_checker.utils.general import ProgressPercentage
+
+
+class EventBucketInfo(TypedDict):
+    bucket: int
+    key: str
+
+
+AWS_ACCESS_KEY = os.getenv("FC_ACCESS_KEY_ID")
+AWS_SECRET_KEY = os.getenv("FC_SECRET_ACCESS_KEY")
 
 my_config = Config(
     s3={"addressing_style": "virtual"}
@@ -11,8 +21,14 @@ my_config = Config(
 s3_client = boto3.client(
     "s3",
     config=my_config,
-    aws_access_key_id=os.getenv("FC_ACCESS_KEY_ID"),
-    aws_secret_access_key=os.getenv("FC_SECRET_ACCESS_KEY"),
+    aws_access_key_id=AWS_ACCESS_KEY,
+    aws_secret_access_key=AWS_SECRET_KEY,
+)
+
+ses_client = boto3.client(
+    "ses",
+    aws_access_key_id=AWS_ACCESS_KEY,
+    aws_secret_access_key=AWS_SECRET_KEY,
 )
 
 cors_headers = {
@@ -27,11 +43,11 @@ def get_presigned_url(bucket: str, key: str):
     )
 
 
-def retrieve_bucket_info(event: dict) -> tuple:
+def retrieve_bucket_info(event: dict) -> EventBucketInfo:
     s3 = event["Records"][0]["s3"]
-    name = s3["bucket"]["name"]
+    bucket = s3["bucket"]["name"]
     key = s3["object"]["key"]
-    return (name, key)
+    return {"bucket": bucket, "key": key}
 
 
 def upload_file(file_path: str, bucket: str, key: str) -> str:

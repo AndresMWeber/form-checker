@@ -18,6 +18,7 @@ package:
     - ./**
   include:
     - form_checker/**/*.py
+    - "pyproject.toml"
 
 provider:
   name: aws
@@ -43,6 +44,11 @@ provider:
               - - "arn:aws:s3:::"
                 - Ref: UploadBucket
                 - "/*"
+        - Effect: Allow
+          Action:
+            - ses:SendEmail
+            - ses:SendRawEmail
+          Resource: "*"
   tags:
     GIT-USER: ${self:custom.serverlessGitUser}
     PROPERTY: "form-checker"
@@ -63,7 +69,7 @@ provider:
     serverSideEncryption: AES256
 
 custom:
-  imageBucket: ${env:UPLOAD_BUCKET, 'form-checker-storage'}
+  imageBucket: ${env:UPLOAD_BUCKET, 'form-checker-videos'}
   pythonRequirements:
     layer: true
     dockerizePip: non-linux
@@ -138,7 +144,14 @@ functions:
     image:
       name: formchecker
     environment:
-      COMPRESS_OUTPUT: False
+      FC_COMPRESS_OUTPUT: ${env:FC_COMPRESS_OUTPUT, false}
+      FC_RETIME_MULTIPLIER: ${env:FC_RETIME_MULTIPLIER, 0.5}
+      FC_RETIME_OUTPUT: ${env:FC_RETIME_OUTPUT, false}
+      FC_OUTPUT_CODEC: ${env:FC_OUTPUT_CODEC, "mp4v"}
+      FC_V_CODEC: ${env:FC_V_CODEC, "libx264"}
+      FC_KEY_SUFFIX: ${env:FC_KEY_SUFFIX, "form_check"}
+      FC_OUTPUT_SUFFIX: ${env:FC_OUTPUT_SUFFIX, "processed"}
+      FC_COMPRESSED_OUTPUT_SUFFIX: ${env:FC_COMPRESSED_OUTPUT_SUFFIX, "compressed"}
     events:
       - s3:
           bucket: ${self:custom.imageBucket}
@@ -148,7 +161,22 @@ functions:
             - prefix: uploads/
             - suffix: .mp4
     timeout: 900
-
+  notify:
+    layers:
+      - Ref: PythonRequirementsLambdaLayer
+    handler: form_checker.handlers.notify.handler
+    environment:
+      FC_EMAIL_DESTINATION: ${env:FC_EMAIL_DESTINATION}
+      FC_EMAIL_SOURCE: ${env:FC_EMAIL_SOURCE, "formchecker@andresmweber.com"}
+      SENDGRID_API_KEY: ${env:SENDGRID_API_KEY}
+    events:
+      - s3:
+          bucket: ${self:custom.imageBucket}
+          event: s3:ObjectCreated:*
+          existing: true
+          rules:
+            - prefix: processed/
+            - suffix: .mp4
   presigned:
     handler: form_checker.handlers.presigned.handler
     layers:

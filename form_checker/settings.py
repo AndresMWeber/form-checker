@@ -19,6 +19,8 @@ class Config:
     COMPRESSED_FILE_SUFFIX = os.getenv(
         "FC_COMPRESSED_OUTPUT_SUFFIX", "compressed"
     )
+    EMAIL_DESTINATION = os.getenv("FC_EMAIL_DESTINATION", None)
+    EMAIL_SOURCE = os.getenv("FC_EMAIL_SOURCE", "formchecker@andresmweber.com")
 
 
 def class_to_str(cls):

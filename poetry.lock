@@ -395,6 +395,14 @@ python-versions = ">=3.5"
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "python-http-client"
+version = "3.3.5"
+description = "HTTP REST client, simplified for Python"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[[package]]
 name = "s3transfer"
 version = "0.5.0"
 description = "An Amazon S3 Transfer Manager"
@@ -407,6 +415,18 @@ botocore = ">=1.12.36,<2.0a.0"
 
 [package.extras]
 crt = ["botocore[crt] (>=1.20.29,<2.0a.0)"]
+
+[[package]]
+name = "sendgrid"
+version = "6.9.4"
+description = "Twilio SendGrid library for Python"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[package.dependencies]
+python-http-client = ">=3.2.1"
+starkbank-ecdsa = ">=2.0.1"
 
 [[package]]
 name = "setuptools-scm"
@@ -430,6 +450,14 @@ description = "Python 2 and 3 compatibility utilities"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
+
+[[package]]
+name = "starkbank-ecdsa"
+version = "2.0.3"
+description = "A lightweight and fast pure python ECDSA library"
+category = "main"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "toml"
@@ -471,7 +499,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8,<3.11"
-content-hash = "9d48f424d655d23d3a03fa6cd24d03aeecbd4f4fccae7ea5d65d7ce14b602e65"
+content-hash = "9926e7e221e1c83ba27ea372362ee77f81f799bbb05dbaee77e797b0915b4829"
 
 [metadata.files]
 absl-py = [
@@ -816,9 +844,17 @@ python-dotenv = [
     {file = "python-dotenv-0.19.2.tar.gz", hash = "sha256:a5de49a31e953b45ff2d2fd434bbc2670e8db5273606c1e737cc6b93eff3655f"},
     {file = "python_dotenv-0.19.2-py2.py3-none-any.whl", hash = "sha256:32b2bdc1873fd3a3c346da1c6db83d0053c3c62f28f1f38516070c4c8971b1d3"},
 ]
+python-http-client = [
+    {file = "python_http_client-3.3.5-py3-none-any.whl", hash = "sha256:558ece0088af1c3430d55ea65e3f06a6a3d7cdd9e14bd905916081ce876c5aaf"},
+    {file = "python_http_client-3.3.5.tar.gz", hash = "sha256:a41da9bd1d38c6a5fc673d1667501e9e691783f7caa14db70985da43c6d99fba"},
+]
 s3transfer = [
     {file = "s3transfer-0.5.0-py3-none-any.whl", hash = "sha256:9c1dc369814391a6bda20ebbf4b70a0f34630592c9aa520856bf384916af2803"},
     {file = "s3transfer-0.5.0.tar.gz", hash = "sha256:50ed823e1dc5868ad40c8dc92072f757aa0e653a192845c94a3b676f4a62da4c"},
+]
+sendgrid = [
+    {file = "sendgrid-6.9.4-py3-none-any.whl", hash = "sha256:f0faa12189e85962651ec1062f6a53e7b0272c452e721a8f4d6847cddad9cfa8"},
+    {file = "sendgrid-6.9.4.tar.gz", hash = "sha256:40653ec7a1ca889398ed6aadba480ae6ab73b9f4329ad841ef4d2bd81848cf62"},
 ]
 setuptools-scm = [
     {file = "setuptools_scm-6.3.2-py3-none-any.whl", hash = "sha256:4c64444b1d49c4063ae60bfe1680f611c8b13833d556fd1d6050c0023162a119"},
@@ -827,6 +863,9 @@ setuptools-scm = [
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
+]
+starkbank-ecdsa = [
+    {file = "starkbank-ecdsa-2.0.3.tar.gz", hash = "sha256:73b62b1b3de54bbaa05dedb1a2d951c033432bb074de899e19d4a96a36b21df6"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
