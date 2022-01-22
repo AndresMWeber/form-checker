@@ -47,6 +47,14 @@ provider:
               - - "arn:aws:s3:::"
                 - Ref: UploadBucket
                 - "/*"
+        - Effect: "Allow"
+          Action:
+            - "s3:ListBucket"
+          Resource:
+            Fn::Join:
+              - ""
+              - - "arn:aws:s3:::"
+                - Ref: UploadBucket
   tags:
     GIT-USER: ${self:custom.serverlessGitUser}
     PROPERTY: "form-checker"
@@ -136,6 +144,15 @@ functions:
     events:
       - http:
           path: version
+          method: get
+          cors: true
+  videos:
+    layers:
+      - Ref: PythonRequirementsLambdaLayer
+    handler: form_checker.handlers.list_videos.handler
+    events:
+      - http:
+          path: videos
           method: get
           cors: true
   upload:

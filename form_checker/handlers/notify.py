@@ -1,15 +1,16 @@
 import logging
 import os
 from form_checker.settings import Config
-from form_checker.utils.aws import retrieve_bucket_info
+from form_checker.utils.aws import retrieve_bucket_info,compose_s3_url
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
 
 def handler(event, _):
     bucket_data = retrieve_bucket_info(event)
-    s3_path = f"{bucket_data['bucket']}/{bucket_data['key']}"
-    s3_url = f"https://s3.amazonaws.com/{s3_path}"
+    s3_urls = compose_s3_url(bucket_data['bucket'], bucket_data['key'])
+    s3_path = s3_urls['path']
+    s3_url = s3_urls['url']
     subject = "New video uploaded to {s3_path}"
     recipient = Config.EMAIL_DESTINATION
     sender = Config.EMAIL_SOURCE

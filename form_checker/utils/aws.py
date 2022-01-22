@@ -2,19 +2,24 @@ import os
 import boto3
 import logging
 from typing import TypedDict
-from botocore.config import Config
 from form_checker.utils.general import ProgressPercentage
+from form_checker.settings import Config
+from botocore.config import Config as awsConfig
 
 
 class EventBucketInfo(TypedDict):
     bucket: int
     key: str
 
+class S3Urls(TypedDict):
+    url:str
+    path: str
+
 
 AWS_ACCESS_KEY = os.getenv("FC_ACCESS_KEY_ID")
 AWS_SECRET_KEY = os.getenv("FC_SECRET_ACCESS_KEY")
 
-my_config = Config(
+my_config = awsConfig(
     s3={"addressing_style": "virtual"}
 )  # , signature_version="v4")
 
@@ -68,3 +73,17 @@ def upload_file(file_path: str, bucket: str, key: str, extraArgs={}) -> str:
         raise
     logging.info("Successfully uploaded file to S3.")
     return key
+
+
+def list_videos():
+    videos = s3_client.list_objects(
+        Bucket=Config.BUCKET,
+        Delimiter="string",
+        Prefix="processed/",
+    )
+    return videos["Contents"]
+
+
+def compose_s3_url(bucket: str, key: str) -> S3Urls:
+    s3_path = f"{bucket}/{key}"
+    return {"url": f"https://s3.amazonaws.com/{s3_path}", "path": s3_path}
