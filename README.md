@@ -53,6 +53,9 @@
     - [Configure](#configure)
     - [Local](#local)
     - [Deploy](#deploy)
+        - [Via Local Invocation (must have .env file set up)](#via-local-invocation-must-have-env-file-set-up)
+        - [Via GitHub](#via-github)
+        - [Invocation](#invocation)
 - [⛏️ Tech Stack <a name = "tech"></a>](#️-tech-stack-)
 - [✍️ Authors <a name = "authors"></a>](#️-authors-)
 - [🎉 Acknowledgements <a name = "acknowledgement"></a>](#-acknowledgements-)
@@ -128,17 +131,39 @@ foo@bar:~$ form_check_ui
 
 Please note that deployment will be automatic if you set up the configuration properly and push to your own fork via GitHub Actions.
 
+###### Via Local Invocation (must have .env file set up)
+
+1. Example local invocation of email notification lambda
+```console
+foo@bar:~$ sls invoke local --function notify --data '{"Records":[{"s3":{"bucket": {"name":"form-checker-videos"}, "object":{"key": "processed/video.mp4"}}}]}'
+```
+
+2. Deploys the serverless cloud infrastructure from your local .env settings.
+```console
+foo@bar:~$ sls deploy -v
+```
+
+###### Via GitHub
 1. Create the domain for the AWS Api Gateway
 ```console
 foo@bar:~$ sls create_domain
 ```
 
-2. Deploys the serverless cloud infrastructure.
-```console
-foo@bar:~$ sls deploy -v
+2. Add the necessary GitHub repo secrets:
+```shell
+CODECOV_TOKEN=<Optional: Your (CodeCov)[https://codecov.io/] generated API Key>
+SENDGRID_API_KEY=<Optional: Your SendGrid (email notification feature) generated API key>
+FC_EMAIL_DESTINATION=<Optional: the email address you want to be notified to>
+AWS_ACCESS_KEY_ID=<Your AWS generated key id>
+AWS_SECRET_ACCESS_KEY=<Your AWS generated access key>
+AWS_DEFAULT_REGION=<Your AWS region>
 ```
 
-3. Now you will be able to upload a file using `${DOMAIN}/presigned`
+3. Push to GitHub
+
+###### Invocation
+
+1. Now you will be able to upload a file using `${DOMAIN}/presigned`
 ```console
 foo@bar:~$ curl -L -X POST 'subdomain.domain.com/presigned' \
 -H 'Content-Type: application/json' \
@@ -146,7 +171,7 @@ foo@bar:~$ curl -L -X POST 'subdomain.domain.com/presigned' \
     "filename": "test"
 }'
 ```
-Now you may upload a file using the response url and the upload lambda will trigger which will create a new video file in the s3 bucket.
+2. Now you may upload a file using the response url and the upload lambda will trigger which will create a new video file in the s3 bucket.
 
 ## ⛏️ Tech Stack <a name = "tech"></a>
 

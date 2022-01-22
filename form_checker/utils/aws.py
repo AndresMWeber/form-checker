@@ -50,14 +50,14 @@ def retrieve_bucket_info(event: dict) -> EventBucketInfo:
     return {"bucket": bucket, "key": key}
 
 
-def upload_file(file_path: str, bucket: str, key: str) -> str:
+def upload_file(file_path: str, bucket: str, key: str, extraArgs={}) -> str:
     logging.info(f"Uploading local file {file_path} to s3: {bucket}/{key}")
     try:
         s3_client.upload_file(
             file_path,
             bucket,
             key,
-            ExtraArgs={"Metadata": {"source_path": file_path}},
+            ExtraArgs={"Metadata": {"source_path": file_path}, **extraArgs},
             Callback=ProgressPercentage(file_path),
         )
         try:

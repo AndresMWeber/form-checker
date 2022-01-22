@@ -38,17 +38,15 @@ provider:
           Action:
             - "s3:GetObject"
             - "s3:PutObject"
+            - "s3:DeleteObject"
+            - "s3:PutObjectAcl"
+            - "s3:PutObjectVersionAcl"
           Resource:
             Fn::Join:
               - ""
               - - "arn:aws:s3:::"
                 - Ref: UploadBucket
                 - "/*"
-        - Effect: Allow
-          Action:
-            - ses:SendEmail
-            - ses:SendRawEmail
-          Resource: "*"
   tags:
     GIT-USER: ${self:custom.serverlessGitUser}
     PROPERTY: "form-checker"
@@ -149,7 +147,7 @@ functions:
       FC_RETIME_OUTPUT: ${env:FC_RETIME_OUTPUT, false}
       FC_OUTPUT_CODEC: ${env:FC_OUTPUT_CODEC, "mp4v"}
       FC_V_CODEC: ${env:FC_V_CODEC, "libx264"}
-      FC_KEY_SUFFIX: ${env:FC_KEY_SUFFIX, "form_check"}
+      FC_KEY_SUFFIX: ${env:FC_KEY_SUFFIX, "processed"}
       FC_OUTPUT_SUFFIX: ${env:FC_OUTPUT_SUFFIX, "processed"}
       FC_COMPRESSED_OUTPUT_SUFFIX: ${env:FC_COMPRESSED_OUTPUT_SUFFIX, "compressed"}
     events:
@@ -204,10 +202,10 @@ resources:
         BucketName: ${self:custom.imageBucket}
         AccessControl: Private
         PublicAccessBlockConfiguration:
-          BlockPublicAcls: true
+          BlockPublicAcls: false
           BlockPublicPolicy: false
-          IgnorePublicAcls: true
-          RestrictPublicBuckets: true
+          IgnorePublicAcls: false
+          RestrictPublicBuckets: false
         CorsConfiguration:
           CorsRules:
             - AllowedMethods:
@@ -228,8 +226,13 @@ resources:
               Effect: Allow
               Principal: "*"
               Action:
-                - "s3:GetObject"
                 - "s3:PutObject"
-              Resource: arn:aws:s3:::${self:custom.imageBucket}/*
+              Resource: arn:aws:s3:::${self:custom.imageBucket}/uploads/*
+            - Sid: AddPerm
+              Effect: Allow
+              Principal: "*"
+              Action:
+                - "s3:GetObject"
+              Resource: arn:aws:s3:::${self:custom.imageBucket}/processed/*
         Bucket:
           Ref: UploadBucket

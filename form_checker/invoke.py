@@ -15,7 +15,9 @@ except:
 
 
 def run(file_path=None, key=None, bucket=None, upload=False) -> str:
-    logging.info(f"Running Form-Checker.  Config State:\n{class_to_str(Config)}")
+    logging.info(
+        f"Running Form-Checker.  Config State:\n{class_to_str(Config)}"
+    )
 
     if bucket:
         Config.BUCKET = bucket
@@ -36,6 +38,7 @@ def run(file_path=None, key=None, bucket=None, upload=False) -> str:
             output,
             Config.BUCKET,
             add_bucket_prefix(key or Path(output).name, Config.KEY_SUFFIX),
+            extraArgs={"ACL": "public-read"},
         )
         logging.info("File uploaded successfully to S3")
         return s3_key

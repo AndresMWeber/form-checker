@@ -106,4 +106,4 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Deploy to Lambda Function and API Gateway
-        run: npx serverless deploy -v
+        run: npx serverless deploy --verbose
