@@ -29,7 +29,10 @@ jobs:
           poetry-version: ${{ matrix.poetry-version }}
 
       - name: Install dependencies
-        run: poetry install
+        run: poetry export -f requirements.txt --dev --without-hashes | poetry run pip install -r /dev/stdin
+
+      - name: Poetry virtualenv install
+        run: poetry install --no-interaction --no-ansi
 
       - name: Build and Run Test
         run: poetry run pytest

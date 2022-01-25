@@ -6,6 +6,7 @@ COPY form_checker ./form_checker
 COPY poetry.lock pyproject.toml ./
 RUN pip3.9 install --upgrade pip && pip3.9 install "poetry==$POETRY_VERSION"
 RUN poetry config virtualenvs.create false
+RUN poetry export -f requirements.txt --dev --without-hashes | poetry run pip install -r /dev/stdin
 RUN poetry install --no-interaction --no-ansi
 
 # Verify installations
